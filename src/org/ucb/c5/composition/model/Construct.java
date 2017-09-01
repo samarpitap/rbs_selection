@@ -9,9 +9,15 @@ import java.util.List;
  * @author J. Christopher Anderson
  */
 public class Construct {
-    public List<Transcript> mRNAs;
-    public String promoter;
-    public String terminator;
+    private final List<Transcript> mRNAs;
+    private final String promoter;
+    private final String terminator;
+
+    public Construct(List<Transcript> mRNAs, String promoter, String terminator) {
+        this.mRNAs = mRNAs;
+        this.promoter = promoter;
+        this.terminator = terminator;
+    }
     
     public String toSeq() throws Exception {
         StringBuilder out = new StringBuilder();

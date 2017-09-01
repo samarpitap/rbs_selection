@@ -39,10 +39,7 @@ public class CompositionToDNA {
         }
 
         //Construct the output dna
-        Construct out = new Construct();
-        out.mRNAs = mRNAs;
-        out.promoter = comp.getPromoter();
-        out.terminator = comp.getTerminator();
+        Construct out = new Construct(mRNAs, comp.getPromoter(), comp.getTerminator());
         return out;
     }
 

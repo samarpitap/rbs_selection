@@ -17,11 +17,11 @@ import java.util.Set;
 public class TranscriptDesigner {
 
     private Map<Character, String> aminoAcidToCodon;
-    private RBSChooser2 rbsChooser;
+    private RBSChooser2 rbsChooser;  //Delete the 2 to use old algorithm
 
     public void initiate() throws Exception {
         //Initialize the RBSChooser
-        rbsChooser = new RBSChooser2();
+        rbsChooser = new RBSChooser2();  //Delete the 2 to use old algorithm
         rbsChooser.initiate();
         
         //Construct a map between each amino acid and the highest-CAI codon for E coli
@@ -64,9 +64,5 @@ public class TranscriptDesigner {
         //Construct the Transcript and return it
         Transcript out = new Transcript(selectedRBS, peptide, codons);
         return out;
-    }
-
-    public static void main(String[] args) throws Exception {
-        
     }
 }
