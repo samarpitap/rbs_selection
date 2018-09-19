@@ -31,16 +31,18 @@ public class RBSChooser2 {
         //initialize rbss
         rbss = new ArrayList<>();
 
-        //initialize Translate
-        Translate AminoAcids = new Translate();
-
-
         //Read the data file
         String data = FileUtils.readResourceFile("composition/data/coli_genes.txt");
 
         //Creating the HashMap for coli_genes.txt
         String[] lines_data = data.split("\\r|\\r?\\n");
+
+        //Create and initiate translate
+        Translate translate = new Translate();
+        translate.initiate();
+
         for (int i = 0; i < lines_data.length; i++) {
+
             String line = lines_data[i];
             String[] tabs = line.split("\t");
 
@@ -54,6 +56,8 @@ public class RBSChooser2 {
         String rbsOptions = FileUtils.readResourceFile("composition/data/rbs_options.txt");
 
         //Create RBS list
+
+
         String[] lines_rbs = rbsOptions.split("\\r|\\r?\\n");
         for (int i = 0; i <lines_rbs.length; i++) {
             String line = lines_rbs[i];
@@ -63,7 +67,7 @@ public class RBSChooser2 {
             String description = "from ecoli: " + ecoliGenes.get(rName)[0];
             String rbs = tabs[1];
             String cds = ecoliGenes.get(rName)[6];
-            String first6aas =  AminoAcids.run(cds.substring(0,17));
+            String first6aas =  translate.run(cds.substring(0,18));
 
             rbss.add(new RBSOption(rName, description, rbs, cds, first6aas));
 
@@ -94,6 +98,8 @@ public class RBSChooser2 {
         RBSOption bestRBS = null;
         int bestDist = 1000;
         double bestHairpin = 100.00;
+        HairpinCounter hairpinC = new HairpinCounter();
+        hairpinC.initiate();
 
         for (RBSOption option: rbss) {
 
@@ -102,7 +108,8 @@ public class RBSChooser2 {
             }
 
             int dist = calcdist.run(cds, option.getCds());
-            double hairpinCount = new HairpinCounter().run(option.getRbs()+cds.substring(0,6));
+            String seq = option.getRbs()+cds.substring(0,6);
+            double hairpinCount = hairpinC.run(seq);
 
             if (dist < bestDist && hairpinCount < bestHairpin) {
                 bestDist = dist;
@@ -129,7 +136,7 @@ public class RBSChooser2 {
 
         //Make the first choice with an empty Set of ignores
         Set<RBSOption> ignores = new HashSet<>();
-        RBSOption selected1 = chooser.run(peptide, ignores);
+        RBSOption selected1 = chooser.run(cds, ignores);
 
         //Add the first selection to the list of things to ignore
         ignores.add(selected1);
